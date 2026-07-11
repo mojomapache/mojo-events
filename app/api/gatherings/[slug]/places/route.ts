@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import type { Place } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { isHostAuthorized } from "@/lib/auth";
 import { fetchNearbyPlaces, NormalizedPlace } from "@/lib/places";
@@ -12,7 +13,7 @@ export async function GET(req: NextRequest, { params }: { params: { slug: string
   });
   if (!gathering) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
-  const hostPicks = gathering.places.filter((p) => p.hostPick);
+  const hostPicks = gathering.places.filter((p: Place) => p.hostPick);
 
   let autoPlaces: NormalizedPlace[] = [];
   const cache = gathering.placesCache;
@@ -23,7 +24,7 @@ export async function GET(req: NextRequest, { params }: { params: { slug: string
   } else if (gathering.lat != null && gathering.lng != null) {
     autoPlaces = await fetchNearbyPlaces(gathering.lat, gathering.lng);
     // Exclude anything the host already curated by name, to avoid dupes.
-    const hostNames = new Set(hostPicks.map((p) => p.name.toLowerCase()));
+    const hostNames = new Set(hostPicks.map((p: Place) => p.name.toLowerCase()));
     autoPlaces = autoPlaces.filter((p) => !hostNames.has(p.name.toLowerCase()));
 
     await prisma.placesCache.upsert({

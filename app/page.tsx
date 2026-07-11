@@ -4,6 +4,8 @@ import ThemeStyle from "@/components/ThemeStyle";
 import { THEMES, ThemeKey } from "@/lib/themes";
 import { STRINGS, Lang } from "@/lib/i18n";
 
+type Strings = (typeof STRINGS)[Lang];
+
 export default function CreateGatheringPage() {
   const [lang, setLang] = useState<Lang>("en");
   const [theme, setTheme] = useState<ThemeKey>("raccoon_bbq");
@@ -110,7 +112,7 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
   );
 }
 
-function ResultCard({ result, t }: { result: { guestUrl: string; hostUrl: string }; t: (typeof STRINGS)["en"] }) {
+function ResultCard({ result, t }: { result: { guestUrl: string; hostUrl: string }; t: Strings }) {
   return (
     <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-2xl p-6 flex flex-col gap-4">
       <h2 className="font-disp text-xl font-semibold">🎉 {t.createButton}</h2>
@@ -123,7 +125,7 @@ function ResultCard({ result, t }: { result: { guestUrl: string; hostUrl: string
   );
 }
 
-function LinkRow({ label, url, t }: { label: string; url: string; t: (typeof STRINGS)["en"] }) {
+function LinkRow({ label, url, t }: { label: string; url: string; t: Strings }) {
   return (
     <div>
       <p className="text-[0.78rem] text-[var(--cream-dim)] mb-1">{label}</p>
