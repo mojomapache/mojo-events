@@ -1,0 +1,78 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Gathering {
+  id               String    @id @default(cuid())
+  slug             String    @unique
+  hostKey          String    @unique
+  title            String
+  hostName         String?
+  eventDate        DateTime?
+  address          String
+  lat              Float?
+  lng              Float?
+  theme            String    @default("raccoon_bbq")
+  foodPlan         String    @default("space")
+  hostPicksLabel   String?
+  moreNearbyLabel  String?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  guests           Guest[]
+  places           Place[]
+  placesCache      PlacesCache?
+}
+
+model Guest {
+  id            String    @id @default(cuid())
+  gatheringId   String
+  gathering     Gathering @relation(fields: [gatheringId], references: [id], onDelete: Cascade)
+  name          String
+  status        String
+  partySize     Int       @default(0)
+  dietary       String?
+  freeText      String?
+  labels        String[]  @default([])
+  createdAt     DateTime  @default(now())
+
+  @@index([gatheringId])
+}
+
+model Place {
+  id            String    @id @default(cuid())
+  gatheringId   String
+  gathering     Gathering @relation(fields: [gatheringId], references: [id], onDelete: Cascade)
+  name          String
+  address       String?
+  tag           String?
+  icon          String?
+  rating        Float?
+  reviews       Int?
+  hours         String?
+  openNow       Boolean?
+  delivery      Boolean   @default(false)
+  note          String?
+  website       String?
+  orderLabel    Boolean   @default(false)
+  cashOnly      Boolean   @default(false)
+  hostPick      Boolean   @default(true)
+  googlePlaceId String?
+  sortOrder     Int       @default(0)
+  createdAt     DateTime  @default(now())
+
+  @@index([gatheringId])
+}
+
+model PlacesCache {
+  id           String    @id @default(cuid())
+  gatheringId  String    @unique
+  gathering    Gathering @relation(fields: [gatheringId], references: [id], onDelete: Cascade)
+  fetchedAt    DateTime  @default(now())
+  rawJson      Json
+}

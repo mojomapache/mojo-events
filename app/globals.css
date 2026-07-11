@@ -1,0 +1,27 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #1F2A24; --bg-panel: #26332B; --bg-card: #2E3B32; --bg-card-hover: #34423A;
+  --cream: #F4EEDD; --cream-dim: #C9C3AF; --muted: #93A594;
+  --accent: #E8A33D; --accent-dim: #7A5B25;
+  --clay: #C9634A; --clay-dim: #6B3529;
+  --sage: #7FA98A; --sage-dim: #33473A;
+  --border: rgba(244,238,221,0.10); --border-strong: rgba(244,238,221,0.20);
+}
+
+body {
+  background: var(--bg);
+  color: var(--cream);
+}
+
+.lights {
+  height: 22px;
+  background-image: radial-gradient(circle, var(--accent) 3px, transparent 3.5px);
+  background-size: 28px 22px;
+  background-position: 14px 0px;
+  opacity: 0.9;
+}
