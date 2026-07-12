@@ -1,11 +1,5 @@
-import HostClient from "./HostClient";
+import GuestClient from "./GuestClient";
 
-export default function HostPage({
-  params,
-  searchParams
-}: {
-  params: { slug: string };
-  searchParams: { key?: string };
-}) {
-  return <HostClient slug={params.slug} hostKey={searchParams.key ?? ""} />;
+export default function GuestPage({ params }: { params: { slug: string } }) {
+  return <GuestClient slug={params.slug} />;
 }

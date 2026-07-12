@@ -1,1 +1,3 @@
 https://events.mojomapache.com/g/raccoons-together-strong-2026-edition-wmnjf6pj/host?key=4TaHvuBxTyYjY224wT8XtAWCDt758tFJ
+
+Google API Credentials key : AIzaSyD1B3F1dT77ZX64WqGWHtFPu_ogmQtwHEc
