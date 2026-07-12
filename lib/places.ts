@@ -44,8 +44,19 @@ export async function geocodeAddress(address: string): Promise<{ lat: number; ln
 
   const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${apiKey}`;
   const res = await fetch(url);
-  if (!res.ok) return null;
-  const data = await res.json();
+  const data = await res.json().catch(() => null);
+
+  // Geocoding API returns 200 even on logical failures (bad key, no results),
+  // with the real error in the JSON body -- so check `status`, not just res.ok.
+  if (!res.ok || !data || data.status !== "OK") {
+    console.error("[geocodeAddress] failed", {
+      httpStatus: res.status,
+      apiStatus: data?.status,
+      errorMessage: data?.error_message
+    });
+    return null;
+  }
+
   const loc = data?.results?.[0]?.geometry?.location;
   return loc ? { lat: loc.lat, lng: loc.lng } : null;
 }
@@ -73,11 +84,21 @@ export async function fetchNearbyPlaces(lat: number, lng: number, radiusMeters =
             }
           })
         });
-        if (!res.ok) return [];
+        if (!res.ok) {
+          const errorBody = await res.json().catch(() => null);
+          console.error("[fetchNearbyPlaces] failed", {
+            category: group.includedTypes[0],
+            httpStatus: res.status,
+            errorMessage: errorBody?.error?.message,
+            errorStatus: errorBody?.error?.status
+          });
+          return [];
+        }
         const data = await res.json();
         const places = (data?.places ?? []) as any[];
         return places.map((p) => normalizePlace(p, group));
-      } catch {
+      } catch (err) {
+        console.error("[fetchNearbyPlaces] network error", { category: group.includedTypes[0], err: String(err) });
         return [];
       }
     })
