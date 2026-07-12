@@ -1,4 +1,4 @@
-export type ThemeKey = "raccoon_bbq" | "garden_party" | "fiesta_night";
+export type ThemeKey = "raccoon_bbq" | "garden_party" | "fiesta_night" | "backyard_meeting";
 
 export const THEMES: Record<ThemeKey, {
   label: string;
@@ -6,6 +6,7 @@ export const THEMES: Record<ThemeKey, {
   vars: Record<string, string>;
   eventName: { en: string; es: string };
   tagline?: { en: string; es: string };
+  backgroundImage?: string;
 }> = {
   raccoon_bbq: {
     label: "🦝 Raccoon BBQ",
@@ -19,7 +20,8 @@ export const THEMES: Record<ThemeKey, {
       "--border": "rgba(244,238,221,0.10)", "--border-strong": "rgba(244,238,221,0.20)"
     },
     eventName: { en: "Ana's Backyard BBQ", es: "El Asado de Ana" },
-    tagline: { en: "Papa raccoon rules: No trash, no food left behind.", es: "Las reglas de papá mapache: sin basura, sin comida de sobra." }
+    tagline: { en: "Papa raccoon rules: No trash, no food left behind.", es: "Las reglas de papá mapache: sin basura, sin comida de sobra." },
+    backgroundImage: "/backgrounds/raccoon-bbq.jpg"
   },
   garden_party: {
     label: "🌿 Garden Party",
@@ -46,5 +48,19 @@ export const THEMES: Record<ThemeKey, {
       "--border": "rgba(245,238,230,0.10)", "--border-strong": "rgba(245,238,230,0.20)"
     },
     eventName: { en: "Ana's Fiesta Night", es: "La Fiesta de Ana" }
+  },
+  backyard_meeting: {
+    label: "🌳 Backyard Meeting",
+    heroEmoji: "🌳",
+    vars: {
+      "--bg": "#22282A", "--bg-panel": "#2A3234", "--bg-card": "#313B3D", "--bg-card-hover": "#394447",
+      "--cream": "#EDEFE8", "--cream-dim": "#C2C7BF", "--muted": "#8D9793",
+      "--accent": "#7FB0C7", "--accent-dim": "#2E4A54",
+      "--clay": "#C98F5A", "--clay-dim": "#5C4530",
+      "--sage": "#8AAE86", "--sage-dim": "#34432F",
+      "--border": "rgba(237,239,232,0.10)", "--border-strong": "rgba(237,239,232,0.20)"
+    },
+    eventName: { en: "Backyard Meeting", es: "Reunión en el Patio" },
+    backgroundImage: "/backgrounds/backyard-meeting.jpg"
   }
 };
