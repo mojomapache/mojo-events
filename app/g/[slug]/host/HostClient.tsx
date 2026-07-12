@@ -5,6 +5,8 @@ import { THEMES, ThemeKey } from "@/lib/themes";
 import { STRINGS, Lang } from "@/lib/i18n";
 import { LABEL_DEFINITIONS, labelName } from "@/lib/labels";
 
+type Strings = (typeof STRINGS)[Lang];
+
 type Gathering = {
   title: string; hostName: string | null; address: string; theme: ThemeKey;
   foodPlan: "hosted" | "space" | "hybrid"; hostPicksLabel: string | null; moreNearbyLabel: string | null;
@@ -288,7 +290,7 @@ function AddPlaceForm({
   onSave,
   onCancel
 }: {
-  t: (typeof STRINGS)["en"];
+  t: Strings;
   onSave: (data: { name: string; address: string; tag: string; icon: string; website: string; cashOnly: boolean; orderLabel: boolean; note: string }) => void;
   onCancel: () => void;
 }) {
