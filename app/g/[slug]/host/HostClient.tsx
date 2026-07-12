@@ -11,7 +11,11 @@ type Gathering = {
   isHost: boolean;
 };
 type Guest = { id: string; name: string; status: string; partySize: number; dietary: string | null; freeText: string | null; labels: string[] };
-type Place = { id: string; name: string; rating: number | null; reviews: number | null; note: string | null };
+type Place = {
+  id: string; name: string; address: string | null; tag: string | null; icon: string | null;
+  rating: number | null; reviews: number | null; note: string | null; website: string | null;
+  cashOnly: boolean; orderLabel: boolean;
+};
 
 export default function HostClient({ slug, hostKey }: { slug: string; hostKey: string }) {
   const [lang, setLang] = useState<Lang>("en");
@@ -21,6 +25,7 @@ export default function HostClient({ slug, hostKey }: { slug: string; hostKey: s
   const [loading, setLoading] = useState(true);
   const [unauthorized, setUnauthorized] = useState(false);
   const [editingNoteId, setEditingNoteId] = useState<string | null>(null);
+  const [addingPlace, setAddingPlace] = useState(false);
   const t = STRINGS[lang];
 
   async function loadAll() {
@@ -62,6 +67,26 @@ export default function HostClient({ slug, hostKey }: { slug: string; hostKey: s
     });
     setPlaces((prev) => prev.map((p) => (p.id === placeId ? { ...p, note } : p)));
     setEditingNoteId(null);
+  }
+
+  async function addPlace(data: {
+    name: string; address: string; tag: string; icon: string; website: string; cashOnly: boolean; orderLabel: boolean; note: string;
+  }) {
+    const res = await fetch(`/api/gatherings/${slug}/places?key=${hostKey}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data)
+    });
+    if (res.ok) {
+      const { place } = await res.json();
+      setPlaces((prev) => [...prev, place]);
+      setAddingPlace(false);
+    }
+  }
+
+  async function deletePlace(placeId: string) {
+    await fetch(`/api/gatherings/${slug}/places/${placeId}?key=${hostKey}`, { method: "DELETE" });
+    setPlaces((prev) => prev.filter((p) => p.id !== placeId));
   }
 
   const counts = useMemo(() => ({
@@ -219,13 +244,23 @@ export default function HostClient({ slug, hostKey }: { slug: string; hostKey: s
         </div>
 
         <div>
-          <h3 className="font-disp text-base font-semibold mb-3">{t.nearbyTitle}</h3>
-          <div className="flex flex-col gap-2.5">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="font-disp text-base font-semibold">{t.nearbyTitle}</h3>
+            <button onClick={() => setAddingPlace((v) => !v)} className="text-xs border border-[var(--border-strong)] rounded-lg px-3 py-1.5 text-[var(--cream-dim)]">
+              {addingPlace ? "×" : `+ ${t.addPlace}`}
+            </button>
+          </div>
+
+          {addingPlace && <AddPlaceForm t={t} onSave={addPlace} onCancel={() => setAddingPlace(false)} />}
+
+          <div className="flex flex-col gap-2.5 mt-3">
             {places.map((p) => (
               <div key={p.id} className="bg-[var(--bg-card)] border border-[var(--border)] rounded-2xl px-4 py-3.5 flex items-center gap-3.5 flex-wrap">
                 <div className="flex-1 min-w-[160px]">
-                  <p className="font-disp font-semibold text-sm">{p.name}</p>
-                  <span className="text-[0.76rem] text-[var(--cream-dim)]">★ {p.rating ?? "—"} · {p.reviews ?? 0} {t.reviews}</span>
+                  <p className="font-disp font-semibold text-sm">{p.icon ? `${p.icon} ` : ""}{p.name}</p>
+                  <span className="text-[0.76rem] text-[var(--cream-dim)]">
+                    {p.rating != null ? <>★ {p.rating} · {p.reviews ?? 0} {t.reviews}</> : p.tag}
+                  </span>
                 </div>
                 <div className="flex-[2] min-w-[200px]">
                   {editingNoteId === p.id ? (
@@ -236,12 +271,65 @@ export default function HostClient({ slug, hostKey }: { slug: string; hostKey: s
                     </button>
                   )}
                 </div>
+                <button onClick={() => deletePlace(p.id)} className="text-[0.72rem] text-[var(--clay)] bg-transparent border-none">
+                  {t.remove}
+                </button>
               </div>
             ))}
           </div>
         </div>
       </div>
     </ThemeStyle>
+  );
+}
+
+function AddPlaceForm({
+  t,
+  onSave,
+  onCancel
+}: {
+  t: (typeof STRINGS)["en"];
+  onSave: (data: { name: string; address: string; tag: string; icon: string; website: string; cashOnly: boolean; orderLabel: boolean; note: string }) => void;
+  onCancel: () => void;
+}) {
+  const [name, setName] = useState("");
+  const [address, setAddress] = useState("");
+  const [tag, setTag] = useState("");
+  const [icon, setIcon] = useState("📍");
+  const [website, setWebsite] = useState("");
+  const [cashOnly, setCashOnly] = useState(false);
+  const [orderLabel, setOrderLabel] = useState(false);
+  const [note, setNote] = useState("");
+  const fieldClass = "w-full bg-[var(--bg-panel)] border border-[var(--border-strong)] rounded-lg px-3 py-2 text-sm outline-none focus:border-[var(--accent)]";
+
+  return (
+    <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-2xl p-4 flex flex-col gap-2.5 mb-1">
+      <div className="grid grid-cols-[64px_1fr] gap-2.5">
+        <input value={icon} onChange={(e) => setIcon(e.target.value)} placeholder="🌮" className={fieldClass + " text-center"} />
+        <input value={name} onChange={(e) => setName(e.target.value)} placeholder={t.placeNamePh} className={fieldClass} />
+      </div>
+      <input value={address} onChange={(e) => setAddress(e.target.value)} placeholder={t.placeAddressPh} className={fieldClass} />
+      <div className="grid grid-cols-2 gap-2.5">
+        <input value={tag} onChange={(e) => setTag(e.target.value)} placeholder={t.placeTagPh} className={fieldClass} />
+        <input value={website} onChange={(e) => setWebsite(e.target.value)} placeholder={t.placeWebsitePh} className={fieldClass} />
+      </div>
+      <textarea value={note} onChange={(e) => setNote(e.target.value)} placeholder={t.hostNote} rows={2} className={fieldClass} />
+      <div className="flex items-center gap-4 text-sm text-[var(--cream-dim)]">
+        <label className="flex items-center gap-1.5"><input type="checkbox" checked={cashOnly} onChange={(e) => setCashOnly(e.target.checked)} /> {t.cashOnly}</label>
+        <label className="flex items-center gap-1.5"><input type="checkbox" checked={orderLabel} onChange={(e) => setOrderLabel(e.target.checked)} /> {t.orderOnline}</label>
+      </div>
+      <div className="flex gap-2 mt-1">
+        <button
+          onClick={() => name.trim() && onSave({ name: name.trim(), address, tag, icon: icon || "📍", website, cashOnly, orderLabel, note })}
+          className="bg-[var(--accent)] text-[#241900] rounded-lg px-4 py-2 text-sm font-bold"
+        >
+          {t.saveNote}
+        </button>
+        <button onClick={onCancel} className="text-sm text-[var(--cream-dim)] border border-[var(--border-strong)] rounded-lg px-4 py-2">
+          {t.cancel}
+        </button>
+      </div>
+    </div>
   );
 }
 

@@ -1,0 +1,11 @@
+{
+  "remoteName": "origin",
+  "projects": [
+    {
+      "id": "prj_yZPf3VZMsqqCGP7rjCjASt8S4m0l",
+      "name": "mm-events",
+      "directory": ".",
+      "orgId": "team_kD6sVjKOuq8CKwyVq0MCGldH"
+    }
+  ]
+}
