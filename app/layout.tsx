@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Gather — Mojo Mapache Events",
+  title: "MojoMeetup — Mojo Mapache Events",
   description: "One link. Everyone knows what to bring."
 };
 

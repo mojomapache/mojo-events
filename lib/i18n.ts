@@ -2,7 +2,7 @@ export type Lang = "en" | "es";
 
 export const STRINGS = {
   en: {
-    appName: "Gather", tagline: "One link. Everyone knows what to bring.",
+    appName: "MojoMeetup", tagline: "One link. Everyone knows what to bring.",
     defaultEventTagline: "No trash, no food left behind.",
     taglineLabel: "Tagline",
     guestView: "Guest view", hostView: "Host dashboard", hostedBy: "Hosted by",
@@ -33,10 +33,12 @@ export const STRINGS = {
     hostLinkLabel: "Your private host link (keep this to yourself)", guestLinkLabel: "Guest link (share this one)",
     copyLink: "Copy link", createTitle: "Start a gathering", createSubtitle: "Get a shareable guest link and a private host link, instantly.",
     eventTitlePh: "e.g. Ana's Backyard BBQ", hostNamePh: "Your name", addressPh: "Street address",
-    createButton: "Create gathering", themeLabel: "Theme"
+    createButton: "Create gathering", themeLabel: "Theme",
+    logoModeLabel: "Logo look", logoModeDay: "Day", logoModeNight: "Night",
+    logoModeNote: "Switch this if your gathering runs into the evening, so the logo matches.",
   },
   es: {
-    appName: "Gather", tagline: "Un solo enlace. Todos saben qué llevar.",
+    appName: "ÉchaleMojo", tagline: "Un solo enlace. Todos saben qué llevar.",
     defaultEventTagline: "Sin basura, sin comida de sobra.",
     taglineLabel: "Frase del evento",
     guestView: "Vista invitado", hostView: "Panel del anfitrión", hostedBy: "Organiza",
@@ -67,6 +69,8 @@ export const STRINGS = {
     hostLinkLabel: "Tu enlace privado de anfitrión (guárdalo solo para ti)", guestLinkLabel: "Enlace de invitados (comparte este)",
     copyLink: "Copiar enlace", createTitle: "Crea una reunión", createSubtitle: "Obtén un enlace para invitados y uno privado de anfitrión al instante.",
     eventTitlePh: "ej. El Asado de Ana", hostNamePh: "Tu nombre", addressPh: "Dirección",
-    createButton: "Crear reunión", themeLabel: "Tema"
+    createButton: "Crear reunión", themeLabel: "Tema",
+    logoModeLabel: "Estilo del logo", logoModeDay: "Día", logoModeNight: "Noche",
+    logoModeNote: "Cámbialo si tu reunión se extiende hasta la noche, para que el logo coincida.",
   }
 } as const;

@@ -1,4 +1,4 @@
-# Gather — events.mojomapache.com
+# MojoMeetup — events.mojomapache.com
 
 Backend + web app for the gathering planner: shareable guest links, an
 editable address with real nearby-places search, RSVP tracking with
