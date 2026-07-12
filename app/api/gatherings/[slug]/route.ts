@@ -19,7 +19,8 @@ function publicShape(g: any) {
     foodPlan: g.foodPlan,
     hostPicksLabel: g.hostPicksLabel,
     moreNearbyLabel: g.moreNearbyLabel,
-    tagline: g.tagline
+    tagline: g.tagline,
+    logoMode: g.logoMode
   };
 }
 
@@ -31,7 +32,7 @@ export async function GET(req: NextRequest, { params }: { params: { slug: string
   return NextResponse.json({ ...publicShape(gathering), isHost });
 }
 
-const EDITABLE_FIELDS = ["title", "hostName", "eventDate", "address", "theme", "foodPlan", "hostPicksLabel", "moreNearbyLabel", "tagline"] as const;
+const EDITABLE_FIELDS = ["title", "hostName", "eventDate", "address", "theme", "foodPlan", "hostPicksLabel", "moreNearbyLabel", "tagline", "logoMode"] as const;
 
 export async function PATCH(req: NextRequest, { params }: { params: { slug: string } }) {
   const gathering = await prisma.gathering.findUnique({ where: { slug: params.slug } });
