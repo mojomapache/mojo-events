@@ -9,7 +9,7 @@ type Strings = (typeof STRINGS)[Lang];
 
 type Gathering = {
   title: string; hostName: string | null; address: string; theme: ThemeKey;
-  foodPlan: "hosted" | "space" | "hybrid"; hostPicksLabel: string | null; moreNearbyLabel: string | null;
+  foodPlan: "hosted" | "space" | "hybrid"; hostPicksLabel: string | null; moreNearbyLabel: string | null; tagline: string | null;
   isHost: boolean;
 };
 type Guest = { id: string; name: string; status: string; partySize: number; dietary: string | null; freeText: string | null; labels: string[] };
@@ -165,6 +165,7 @@ export default function HostClient({ slug, hostKey }: { slug: string; hostKey: s
           <label className="block text-[0.78rem] text-[var(--cream-dim)] mb-2">{t.titlesSection}</label>
           <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-2xl p-4 flex flex-col gap-2.5">
             <TitleField label={t.eventTitleLabel} value={gathering.title} onSave={(v) => patchGathering({ title: v })} />
+            <TitleField label={t.taglineLabel} value={gathering.tagline ?? ""} placeholder={t.defaultEventTagline} onSave={(v) => patchGathering({ tagline: v })} />
             <TitleField label={t.hostPicksLabelField} value={gathering.hostPicksLabel ?? ""} placeholder={t.hostPicksTitle} onSave={(v) => patchGathering({ hostPicksLabel: v })} />
             <TitleField label={t.moreNearbyLabelField} value={gathering.moreNearbyLabel ?? ""} placeholder={t.morePicksTitle} onSave={(v) => patchGathering({ moreNearbyLabel: v })} />
           </div>

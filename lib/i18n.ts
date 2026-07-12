@@ -3,6 +3,8 @@ export type Lang = "en" | "es";
 export const STRINGS = {
   en: {
     appName: "Gather", tagline: "One link. Everyone knows what to bring.",
+    defaultEventTagline: "No trash, no food left behind.",
+    taglineLabel: "Tagline",
     guestView: "Guest view", hostView: "Host dashboard", hostedBy: "Hosted by",
     showAddress: "Show address", hideAddress: "Hide address", getDirections: "Get directions",
     foodPlan: { hosted: "Host is providing food and drinks", space: "Space only — bring or order", hybrid: "Host covers some, guests fill in the rest" },
@@ -35,6 +37,8 @@ export const STRINGS = {
   },
   es: {
     appName: "Gather", tagline: "Un solo enlace. Todos saben qué llevar.",
+    defaultEventTagline: "Sin basura, sin comida de sobra.",
+    taglineLabel: "Frase del evento",
     guestView: "Vista invitado", hostView: "Panel del anfitrión", hostedBy: "Organiza",
     showAddress: "Mostrar dirección", hideAddress: "Ocultar dirección", getDirections: "Cómo llegar",
     foodPlan: { hosted: "El anfitrión pone la comida y bebida", space: "Solo el espacio — trae o pide algo", hybrid: "El anfitrión pone algo, los invitados completan el resto" },

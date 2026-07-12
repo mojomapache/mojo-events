@@ -5,7 +5,6 @@ export const THEMES: Record<ThemeKey, {
   heroEmoji: string;
   vars: Record<string, string>;
   eventName: { en: string; es: string };
-  tagline?: { en: string; es: string };
   backgroundImage?: string;
 }> = {
   raccoon_bbq: {
@@ -20,7 +19,6 @@ export const THEMES: Record<ThemeKey, {
       "--border": "rgba(244,238,221,0.10)", "--border-strong": "rgba(244,238,221,0.20)"
     },
     eventName: { en: "Ana's Backyard BBQ", es: "El Asado de Ana" },
-    tagline: { en: "Papa raccoon rules: No trash, no food left behind.", es: "Las reglas de papá mapache: sin basura, sin comida de sobra." },
     backgroundImage: "/backgrounds/raccoon-bbq.jpg"
   },
   garden_party: {

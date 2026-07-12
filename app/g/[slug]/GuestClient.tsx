@@ -8,7 +8,7 @@ import { STRINGS, Lang } from "@/lib/i18n";
 type Gathering = {
   title: string; hostName: string | null; eventDate: string | null; address: string;
   theme: ThemeKey; foodPlan: "hosted" | "space" | "hybrid";
-  hostPicksLabel: string | null; moreNearbyLabel: string | null;
+  hostPicksLabel: string | null; moreNearbyLabel: string | null; tagline: string | null;
 };
 type Guest = { id: string; name: string; status: string; partySize: number };
 
@@ -73,7 +73,7 @@ export default function GuestClient({ slug }: { slug: string }) {
   if (notFound || !gathering) return <ThemeStyle themeKey="raccoon_bbq"><div className="p-8 text-center">Gathering not found.</div></ThemeStyle>;
 
   const theme = THEMES[gathering.theme] ?? THEMES.raccoon_bbq;
-  const tagline = theme.tagline ? theme.tagline[lang] : t.tagline;
+  const tagline = gathering.tagline || t.defaultEventTagline;
   const mapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(gathering.address)}`;
 
   return (
