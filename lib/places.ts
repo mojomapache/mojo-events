@@ -6,6 +6,7 @@ const FIELD_MASK = [
   "places.id",
   "places.displayName",
   "places.formattedAddress",
+  "places.location",
   "places.primaryType",
   "places.types",
   "places.rating",
@@ -36,6 +37,8 @@ export type NormalizedPlace = {
   openNow: boolean | null;
   delivery: boolean;
   mapUrl: string;
+  lat: number | null;
+  lng: number | null;
 };
 
 export async function geocodeAddress(address: string): Promise<{ lat: number; lng: number } | null> {
@@ -78,7 +81,7 @@ export async function fetchNearbyPlaces(lat: number, lng: number, radiusMeters =
           body: JSON.stringify({
             includedTypes: group.includedTypes,
             maxResultCount: 8,
-            rankPreference: "POPULARITY",
+            rankPreference: "DISTANCE",
             locationRestriction: {
               circle: { center: { latitude: lat, longitude: lng }, radius: radiusMeters }
             }
@@ -112,7 +115,31 @@ export async function fetchNearbyPlaces(lat: number, lng: number, radiusMeters =
     seen.add(place.googlePlaceId);
     deduped.push(place);
   }
+
+  // Each category call is individually distance-ranked by Google, but after
+  // merging five separate category results together the combined list isn't
+  // sorted overall -- so re-sort by actual distance from the gathering's
+  // coordinates here. Places missing a location (shouldn't normally happen)
+  // sort to the end rather than the front.
+  deduped.sort((a, b) => {
+    const distA = a.lat != null && a.lng != null ? haversineMeters(lat, lng, a.lat, a.lng) : Infinity;
+    const distB = b.lat != null && b.lng != null ? haversineMeters(lat, lng, b.lat, b.lng) : Infinity;
+    return distA - distB;
+  });
+
   return deduped.slice(0, 20);
+}
+
+function haversineMeters(lat1: number, lng1: number, lat2: number, lng2: number): number {
+  const R = 6371000; // Earth radius in meters
+  const toRad = (deg: number) => (deg * Math.PI) / 180;
+  const dLat = toRad(lat2 - lat1);
+  const dLng = toRad(lng2 - lng1);
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLng / 2) ** 2;
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c;
 }
 
 function normalizePlace(p: any, group: { icon: string; tag: string }): NormalizedPlace {
@@ -128,6 +155,8 @@ function normalizePlace(p: any, group: { icon: string; tag: string }): Normalize
     hours: hoursToday,
     openNow: typeof p.currentOpeningHours?.openNow === "boolean" ? p.currentOpeningHours.openNow : null,
     delivery: Boolean(p.delivery),
-    mapUrl: p.googleMapsUri ?? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(p.displayName?.text ?? "")}`
+    mapUrl: p.googleMapsUri ?? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(p.displayName?.text ?? "")}`,
+    lat: typeof p.location?.latitude === "number" ? p.location.latitude : null,
+    lng: typeof p.location?.longitude === "number" ? p.location.longitude : null
   };
 }
