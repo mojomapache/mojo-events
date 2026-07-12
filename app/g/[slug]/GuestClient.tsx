@@ -1,19 +1,26 @@
 "use client";
 import { useEffect, useState } from "react";
 import ThemeStyle from "@/components/ThemeStyle";
+import Logo from "@/components/Logo";
 import PlaceCard, { PlaceCardData } from "@/components/PlaceCard";
 import { THEMES, ThemeKey } from "@/lib/themes";
 import { STRINGS, Lang } from "@/lib/i18n";
+import { getCookieLang, setCookieLang } from "@/lib/cookieLang";
 
 type Gathering = {
   title: string; hostName: string | null; eventDate: string | null; address: string;
   theme: ThemeKey; foodPlan: "hosted" | "space" | "hybrid";
   hostPicksLabel: string | null; moreNearbyLabel: string | null; tagline: string | null;
+  logoMode: "day" | "night";
 };
 type Guest = { id: string; name: string; status: string; partySize: number };
 
 export default function GuestClient({ slug }: { slug: string }) {
   const [lang, setLang] = useState<Lang>("en");
+  useEffect(() => {
+    const cookieLang = getCookieLang();
+    if (cookieLang) setLang(cookieLang);
+  }, []);
   const [gathering, setGathering] = useState<Gathering | null>(null);
   const [hostPicks, setHostPicks] = useState<PlaceCardData[]>([]);
   const [morePicks, setMorePicks] = useState<PlaceCardData[]>([]);
@@ -81,9 +88,9 @@ export default function GuestClient({ slug }: { slug: string }) {
       <div className="max-w-[880px] mx-auto px-5 pt-6">
         <div className="flex justify-between items-center mb-5 flex-wrap gap-2.5">
           <div className="font-disp text-xl font-semibold flex items-center gap-2">
-            <span>{theme.heroEmoji}</span> {t.appName}
+            <Logo mode={gathering.logoMode} /> {t.appName}
           </div>
-          <button onClick={() => setLang(lang === "en" ? "es" : "en")} className="text-sm border border-[var(--border-strong)] rounded-full px-3.5 py-1.5 text-[var(--cream-dim)]">
+          <button onClick={() => { const next = lang === "en" ? "es" : "en"; setLang(next); setCookieLang(next); }} className="text-sm border border-[var(--border-strong)] rounded-full px-3.5 py-1.5 text-[var(--cream-dim)]">
             🌐 {t.langToggle}
           </button>
         </div>

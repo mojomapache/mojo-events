@@ -1,15 +1,18 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
 import ThemeStyle from "@/components/ThemeStyle";
+import Logo from "@/components/Logo";
 import { THEMES, ThemeKey } from "@/lib/themes";
 import { STRINGS, Lang } from "@/lib/i18n";
 import { LABEL_DEFINITIONS, labelName } from "@/lib/labels";
+import { getCookieLang, setCookieLang } from "@/lib/cookieLang";
 
 type Strings = (typeof STRINGS)[Lang];
 
 type Gathering = {
   title: string; hostName: string | null; address: string; theme: ThemeKey;
   foodPlan: "hosted" | "space" | "hybrid"; hostPicksLabel: string | null; moreNearbyLabel: string | null; tagline: string | null;
+  logoMode: "day" | "night";
   isHost: boolean;
 };
 type Guest = { id: string; name: string; status: string; partySize: number; dietary: string | null; freeText: string | null; labels: string[] };
@@ -21,6 +24,10 @@ type Place = {
 
 export default function HostClient({ slug, hostKey }: { slug: string; hostKey: string }) {
   const [lang, setLang] = useState<Lang>("en");
+  useEffect(() => {
+    const cookieLang = getCookieLang();
+    if (cookieLang) setLang(cookieLang);
+  }, []);
   const [gathering, setGathering] = useState<Gathering | null>(null);
   const [guests, setGuests] = useState<Guest[]>([]);
   const [places, setPlaces] = useState<Place[]>([]);
@@ -120,7 +127,6 @@ export default function HostClient({ slug, hostKey }: { slug: string; hostKey: s
     );
   }
 
-  const theme = THEMES[gathering.theme] ?? THEMES.raccoon_bbq;
   const base = typeof window !== "undefined" ? window.location.origin : "";
   const guestUrl = `${base}/g/${slug}`;
 
@@ -128,8 +134,8 @@ export default function HostClient({ slug, hostKey }: { slug: string; hostKey: s
     <ThemeStyle themeKey={gathering.theme}>
       <div className="max-w-[880px] mx-auto px-5 pt-6">
         <div className="flex justify-between items-center mb-6 flex-wrap gap-2.5">
-          <div className="font-disp text-xl font-semibold flex items-center gap-2">{theme.heroEmoji} {t.appName} · {t.hostView}</div>
-          <button onClick={() => setLang(lang === "en" ? "es" : "en")} className="text-sm border border-[var(--border-strong)] rounded-full px-3.5 py-1.5 text-[var(--cream-dim)]">
+          <div className="font-disp text-xl font-semibold flex items-center gap-2"><Logo mode={gathering.logoMode} /> {t.appName} · {t.hostView}</div>
+          <button onClick={() => { const next = lang === "en" ? "es" : "en"; setLang(next); setCookieLang(next); }} className="text-sm border border-[var(--border-strong)] rounded-full px-3.5 py-1.5 text-[var(--cream-dim)]">
             🌐 {t.langToggle}
           </button>
         </div>
@@ -159,6 +165,25 @@ export default function HostClient({ slug, hostKey }: { slug: string; hostKey: s
           >
             {Object.entries(THEMES).map(([key, th]) => <option key={key} value={key}>{th.label}</option>)}
           </select>
+        </div>
+
+        <div className="mb-7">
+          <label className="block text-[0.78rem] text-[var(--cream-dim)] mb-2">{t.logoModeLabel}</label>
+          <div className="flex gap-2">
+            <button
+              onClick={() => patchGathering({ logoMode: "day" })}
+              className={`flex items-center gap-2 text-sm font-semibold rounded-full px-3.5 py-1.5 border ${gathering.logoMode === "day" ? "bg-[var(--cream)] text-[var(--bg)] border-[var(--cream)]" : "border-[var(--border-strong)] text-[var(--cream-dim)]"}`}
+            >
+              <Logo mode="day" size={18} /> {t.logoModeDay}
+            </button>
+            <button
+              onClick={() => patchGathering({ logoMode: "night" })}
+              className={`flex items-center gap-2 text-sm font-semibold rounded-full px-3.5 py-1.5 border ${gathering.logoMode === "night" ? "bg-[var(--cream)] text-[var(--bg)] border-[var(--cream)]" : "border-[var(--border-strong)] text-[var(--cream-dim)]"}`}
+            >
+              <Logo mode="night" size={18} /> {t.logoModeNight}
+            </button>
+          </div>
+          <p className="text-[0.75rem] text-[var(--muted)] mt-2">{t.logoModeNote}</p>
         </div>
 
         <div className="mb-7">

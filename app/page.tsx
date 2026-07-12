@@ -1,13 +1,19 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ThemeStyle from "@/components/ThemeStyle";
+import Logo from "@/components/Logo";
 import { THEMES, ThemeKey } from "@/lib/themes";
 import { STRINGS, Lang } from "@/lib/i18n";
+import { getCookieLang, setCookieLang } from "@/lib/cookieLang";
 
 type Strings = (typeof STRINGS)[Lang];
 
 export default function CreateGatheringPage() {
   const [lang, setLang] = useState<Lang>("en");
+  useEffect(() => {
+    const cookieLang = getCookieLang();
+    if (cookieLang) setLang(cookieLang);
+  }, []);
   const [theme, setTheme] = useState<ThemeKey>("raccoon_bbq");
   const [title, setTitle] = useState("");
   const [hostName, setHostName] = useState("");
@@ -46,10 +52,10 @@ export default function CreateGatheringPage() {
       <div className="max-w-[560px] mx-auto px-5 pt-10">
         <div className="flex justify-between items-center mb-6">
           <div className="font-disp text-2xl font-semibold flex items-center gap-2">
-            {THEMES[theme].heroEmoji} {t.appName}
+            <Logo mode="day" /> {t.appName}
           </div>
           <button
-            onClick={() => setLang(lang === "en" ? "es" : "en")}
+            onClick={() => { const next = lang === "en" ? "es" : "en"; setLang(next); setCookieLang(next); }}
             className="text-sm border border-[var(--border-strong)] rounded-full px-3.5 py-1.5 text-[var(--cream-dim)]"
           >
             🌐 {t.langToggle}
