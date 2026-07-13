@@ -102,7 +102,7 @@ export default function GuestClient({ slug }: { slug: string }) {
             <h1 className="font-disp text-[2.1rem] font-semibold leading-tight mb-2.5">{theme.heroEmoji} {gathering.title}</h1>
             <p className="text-[var(--cream-dim)] text-[0.95rem] mb-4">
               {gathering.hostName && <>{t.hostedBy} {gathering.hostName} &middot; </>}
-              {gathering.eventDate && new Date(gathering.eventDate).toLocaleDateString(lang, { weekday: "long", month: "long", day: "numeric" })}
+              {gathering.eventDate && new Date(gathering.eventDate).toLocaleDateString(lang, { weekday: "long", month: "long", day: "numeric", timeZone: "UTC" })}
             </p>
             <div className="flex items-center gap-2.5 flex-wrap">
               <button onClick={() => setShowAddress((s) => !s)} className="bg-[var(--bg-panel)] border border-[var(--border-strong)] rounded-full px-3.5 py-2 flex items-center gap-2 text-sm font-semibold">

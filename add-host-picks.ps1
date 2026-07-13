@@ -2,8 +2,8 @@
 # Edit $slug and $hostKey below to match your actual gathering, then run:
 #   .\add-host-picks.ps1
 
-$slug = "raccoons-together-strong-2026-edition-3uhyzvnx"
-$hostKey = "2Rtsa2tRwEBm3922mRV2MP6ct8pfS5K2"
+$slug = "raccoons-together-strong-2026-edition-4nm5mnub"
+$hostKey = "62HAywPnFyGzK5RH37J2fHFn2cBfFwVx"
 $baseUrl = "https://events.mojomapache.com"
 
 $places = @(
