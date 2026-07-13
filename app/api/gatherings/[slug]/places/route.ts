@@ -90,6 +90,7 @@ export async function POST(req: NextRequest, { params }: { params: { slug: strin
       website: body.website ?? null,
       orderLabel: Boolean(body.orderLabel),
       cashOnly: Boolean(body.cashOnly),
+      sortOrder: typeof body.sortOrder === "number" ? body.sortOrder : 0,
       hostPick: true
     }
   });
