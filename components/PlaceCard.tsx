@@ -49,7 +49,7 @@ export default function PlaceCard({ place, lang }: { place: PlaceCardData; lang:
   return (
     <div className="relative min-w-[240px] rounded-t border-t-[3px] border-t-[var(--accent)] bg-[var(--bg-card)] border border-[var(--border)] rounded-b-xl p-4 hover:bg-[var(--bg-card-hover)] transition-colors">
       {place.hostPick && (
-        <span className="absolute -top-2.5 right-3 rounded-full bg-[var(--accent)] text-[#241900] text-[0.66rem] font-bold px-2.5 py-0.5">★</span>
+        <span className="absolute top-2 right-2 rounded-full bg-[var(--accent)] text-[#241900] text-[0.66rem] font-bold px-2.5 py-0.5 z-10">★</span>
       )}
       <div className="flex items-start gap-2.5 mb-2">
         <div className="w-[34px] h-[34px] rounded-lg bg-[var(--bg-panel)] flex items-center justify-center shrink-0 text-[17px]">
