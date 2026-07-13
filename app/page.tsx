@@ -52,7 +52,7 @@ export default function CreateGatheringPage() {
       <div className="max-w-[560px] mx-auto px-5 pt-10">
         <div className="flex justify-between items-center mb-6">
           <div className="font-disp text-2xl font-semibold flex items-center gap-2">
-            <Logo mode="day" /> {t.appName}
+            <Logo mode="day" size={80} /> {t.appName}
           </div>
           <button
             onClick={() => { const next = lang === "en" ? "es" : "en"; setLang(next); setCookieLang(next); }}

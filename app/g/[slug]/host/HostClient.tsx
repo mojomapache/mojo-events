@@ -134,7 +134,7 @@ export default function HostClient({ slug, hostKey }: { slug: string; hostKey: s
     <ThemeStyle themeKey={gathering.theme}>
       <div className="max-w-[880px] mx-auto px-5 pt-6">
         <div className="flex justify-between items-center mb-6 flex-wrap gap-2.5">
-          <div className="font-disp text-xl font-semibold flex items-center gap-2"><Logo mode={gathering.logoMode} /> {t.appName} · {t.hostView}</div>
+          <div className="font-disp text-xl font-semibold flex items-center gap-2"><Logo mode={gathering.logoMode} size={80} /> {t.appName} · {t.hostView}</div>
           <button onClick={() => { const next = lang === "en" ? "es" : "en"; setLang(next); setCookieLang(next); }} className="text-sm border border-[var(--border-strong)] rounded-full px-3.5 py-1.5 text-[var(--cream-dim)]">
             🌐 {t.langToggle}
           </button>
